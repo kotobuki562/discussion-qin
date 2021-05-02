@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../util/supabase";
 import { Layout } from "../components/Layout";
+import { Card } from "../components/Card/Card";
 
 const Home = () => {
   const [posts, setPosts] = useState<any[]>([]);
+  const [check, setCheck] = useState<boolean>();
 
   const fetchPost = () => {
-    const postRef = supabase.from("posts").select("*");
-    return postRef.then((data) => {
-      setPosts(data.body);
+    const postRef = supabase.from("posts").select("*").order("createAt");
+    postRef.then((data) => {
+      return setPosts(data.body);
     });
   };
 
@@ -21,17 +23,13 @@ const Home = () => {
 
   return (
     <Layout>
-      <div>
-        <div className="bg-blue-200 flex flex-col items-center">
-          {posts.map((post) => {
-            return (
-              <div key={post.id}>
-                <p>{post.name}</p>
-                <p>{post.title}</p>
-                <p>{post.text}</p>
-              </div>
-            );
-          })}
+      <div className="w-full">
+        <div className="w-full flex flex-col items-center">
+          <div className="grid xs:grid-cols-3 md:grid-cols-5">
+            {posts.map((post) => {
+              return <Card key={post.id} checkState={post.check} {...post} />;
+            })}
+          </div>
         </div>
       </div>
     </Layout>

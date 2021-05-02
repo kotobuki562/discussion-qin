@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { supabase } from "../../util/supabase";
-import { format, formatISO } from "date-fns";
+import { formatISO } from "date-fns";
 import { InputForm } from "../../components/Input/Input";
 import { Layout } from "../../components/Layout";
+import { Button } from "../../components/Button/Button";
 
 const CreatePost = () => {
   const [name, setName] = useState("");
@@ -15,13 +16,15 @@ const CreatePost = () => {
       type: "text",
       name: "name",
       value: name,
+      required: true,
       onChange: (e) => setName(e.target.value),
-      placeholder: "お名前は？🤔",
+      placeholder: "お名前",
     },
     {
       type: "text",
       name: "title",
       value: title,
+      required: true,
       onChange: (e) => setTitle(e.target.value),
       placeholder: "お題タイトル",
     },
@@ -35,9 +38,11 @@ const CreatePost = () => {
     },
   ];
 
-  const createPost = async () => {
-    try {
-      await supabase.from("posts").insert([
+  const createPost = (e) => {
+    e.preventDefault();
+    supabase
+      .from("posts")
+      .insert([
         {
           name: name,
           title: title,
@@ -46,22 +51,24 @@ const CreatePost = () => {
           updateAt: today,
           check: false,
         },
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
+      ])
+      .then((data) => {
+        console.log(data.body);
+      });
   };
   return (
     <Layout>
-      <div className="bg-red-200 flex flex-col items-center">
-        <InputForm inputs={inputValues} />
-        <button
-          onClick={() => {
-            createPost();
-          }}
-        >
-          送信
-        </button>
+      <div className="flex flex-col items-center">
+        <form onSubmit={createPost}>
+          <InputForm inputs={inputValues} />
+          <Button
+            size="sm"
+            useage={!text || !title || !name ? null : "base"}
+            btnText="送信"
+            type="submit"
+            disabled={!name || !title || !text}
+          />
+        </form>
       </div>
     </Layout>
   );

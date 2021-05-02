@@ -19,6 +19,7 @@ type Input = {
     selectValue?: string[];
     textArea?: boolean;
     textAreaValue?: string;
+    required?: boolean;
   }[];
 };
 
