@@ -18,7 +18,7 @@ import type Post from "../models/posts";
 
 const usePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const usePost = () => {
       .from("posts")
       .select()
       .order("createAt", { ascending: false })
-      .limit(limit)
+      // .limit(limit)
       .then((data) => {
         setLoading(false);
         if (!data.error && data.data) {
@@ -39,14 +39,14 @@ const usePost = () => {
           setPosts(data.data);
         }
       });
-  }, [limit, posts]);
+  }, [limit]);
 
   const handleInsert = (payload: { new: Post }) => {
     setPosts([...posts, payload.new]);
   };
 
   const increaseLimit = () => {
-    setLimit(limit + 5);
+    setLimit(limit + 3);
   };
 
   return { loading, posts, increaseLimit };

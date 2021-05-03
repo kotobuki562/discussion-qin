@@ -3,9 +3,10 @@ import { supabase } from "../util/supabase";
 import { Layout } from "../components/Layout";
 import { Card } from "../components/Card/Card";
 import usePost from "../services/posts";
+import { Button } from "../components/Button/Button";
 
 const Home = () => {
-  const { loading, posts } = usePost();
+  const { loading, posts, increaseLimit } = usePost();
 
   // console.log(posts);
 
@@ -28,9 +29,15 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="w-full">
+      <div className="w-full px-4">
         <div className="w-full flex flex-col items-center">
-          <div className="grid xs:grid-cols-3 md:grid-cols-5">
+          {/* <Button
+            btnText="次の3件"
+            onClick={increaseLimit}
+            useage="base"
+            size="md"
+          /> */}
+          <div className="grid xs:grid-cols-3 md:grid-cols-4">
             {posts?.map((post) => {
               return (
                 <Card

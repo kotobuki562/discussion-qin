@@ -3,6 +3,8 @@ import { icons } from "../../../public/icon";
 import { Button } from "../Button/Button";
 import { useRouter } from "next/router";
 import { supabase } from "../../util/supabase";
+import usePost from "../../services/posts";
+import { DeleteIcon } from "@chakra-ui/icons";
 import cc from "classcat";
 
 type CardInfo = {
@@ -14,6 +16,7 @@ type CardInfo = {
 };
 
 export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
+  const [readMore, setReadMore] = useState(false);
   const router = useRouter();
   const checkCard = async () => {
     if (checkState) {
@@ -37,15 +40,24 @@ export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
     }
   };
 
+  const deleteCard = async () => {
+    const { data, error } = await supabase.from("posts").delete().eq("id", id);
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+    }
+  };
+
   return (
     <div
       key={id}
       className={cc([
-        "border-2 m-2 p-2 rounded-2xl",
+        "border-2 m-2 p-4 rounded-2xl",
         checkState ? "bg-gray-200" : null,
       ])}
     >
-      <div className="flex items-center">
+      <div className="flex items-center mb-4">
         <span
           className={cc([
             "mr-4 w-10 h-10 flex flex-col items-center justify-center rounded-full text-white font-semibold text-lg",
@@ -58,7 +70,7 @@ export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
       </div>
       <button
         onClick={checkCard}
-        className="flex flex-col items-center w-full focus:outline-none"
+        className="w-full flex flex-col items-center mb-4 focus:outline-none"
       >
         <img
           className="w-36"
@@ -67,14 +79,26 @@ export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
         />
       </button>
       <div>
-        {/* <Button
-          btnText={checkState ? "open" : "close"}
-          useage="base"
-          size="sm"
-          onClick={checkCard}
-        /> */}
-        <p>{title}</p>
-        <p>{text}</p>
+        <div className="flex items-center mb-4">
+          <p className="mr-4">{title}</p>
+          <Button
+            btnText={<DeleteIcon />}
+            useage="delete"
+            size="xs"
+            onClick={deleteCard}
+          />
+        </div>
+
+        <p>
+          {readMore ? text : `${text.substring(0, 30)}...`}
+          <Button
+            onClick={() => setReadMore(!readMore)}
+            btnText={readMore ? "閉じる" : "もっと表示"}
+            useage={readMore ? "delete" : "base"}
+            size="xs"
+          />
+        </p>
+        {/* <Button  /> */}
       </div>
     </div>
   );
