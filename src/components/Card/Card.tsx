@@ -1,6 +1,7 @@
 import { VFC, useEffect, useState } from "react";
 import { icons } from "../../../public/icon";
 import { Button } from "../Button/Button";
+import { useRouter } from "next/router";
 import { supabase } from "../../util/supabase";
 import cc from "classcat";
 
@@ -13,6 +14,7 @@ type CardInfo = {
 };
 
 export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
+  const router = useRouter();
   const checkCard = async () => {
     if (checkState) {
       const checkTrue = await supabase
@@ -21,6 +23,7 @@ export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
         .eq("id", id)
         .then((data) => {
           console.log("success false", data.body, id);
+          // return router.reload();
         });
     } else {
       const checkFalse = await supabase
@@ -29,19 +32,28 @@ export const Card: VFC<CardInfo> = ({ id, name, title, text, checkState }) => {
         .eq("id", id)
         .then((data) => {
           console.log("success true", data.body, id);
+          // return router.reload();
         });
     }
   };
 
   return (
     <div
+      key={id}
       className={cc([
         "border-2 m-2 p-2 rounded-2xl",
         checkState ? "bg-gray-200" : null,
       ])}
     >
       <div className="flex items-center">
-        <span className="mr-4">{name.slice(0, 1)}</span>
+        <span
+          className={cc([
+            "mr-4 w-10 h-10 flex flex-col items-center justify-center rounded-full text-white font-semibold text-lg",
+            checkState ? "bg-blue-400" : "bg-yellow-400",
+          ])}
+        >
+          {name.slice(0, 1)}
+        </span>
         <p>{name}</p>
       </div>
       <button

@@ -1,20 +1,19 @@
 import React from "react";
 import Link from "next/link";
+import { ModalForm } from "../components/Modal/Modal";
 
 const Header = () => {
   return (
     <header className="p-4">
       <nav>
         <ul>
-          <li>
+          {/* <li>
             <Link href="/">
               <a>Home</a>
             </Link>
-          </li>
+          </li> */}
           <li>
-            <Link href="/post/create">
-              <a>create</a>
-            </Link>
+            <ModalForm />
           </li>
         </ul>
       </nav>
