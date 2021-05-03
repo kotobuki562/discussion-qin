@@ -39,7 +39,7 @@ const usePost = () => {
           setPosts(data.data);
         }
       });
-  }, [limit]);
+  }, [limit, posts]);
 
   const handleInsert = (payload: { new: Post }) => {
     setPosts([...posts, payload.new]);
