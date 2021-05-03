@@ -57,13 +57,15 @@ export const InputForm: VFC<Input> = ({ inputs }) => {
               <Textarea
                 value={props.value}
                 placeholder={props.placeholder}
-                className="bg-opacity-0 py-1 px-2 w-full rounded border border-fontDark outline-none shadow-none"
+                _focus={{ outline: "none" }}
+                className="bg-opacity-0 py-1 px-2 w-full rounded border border-fontDark shadow-none"
                 onChange={props.onChange}
               />
             ) : (
               <Input
                 focusBorderColor="gray.300"
-                className="bg-opacity-0 py-1 px-2 w-full rounded border border-fontDark outline-none shadow-none"
+                _focus={{ outline: "none" }}
+                className="bg-opacity-0 py-1 px-2 w-full rounded border border-fontDark shadow-none"
                 onChange={props.onChange}
                 {...props}
               />
